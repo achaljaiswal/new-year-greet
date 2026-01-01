@@ -1,27 +1,124 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-/* -------- TEXT ANIMATION VARIANT -------- */
-const lineVariant = {
-  hidden: { opacity: 0, y: 8 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: 0.35 + i * 0.12,
-      duration: 0.5,
-      ease: "easeOut",
-    },
-  }),
-};
+const LETTER = [
+  "I hope this year brings U calm mornings ☀️ peaceful nights 🌙 & little moments that make U smile :)",
+  "without any reason 😊",
+  "",
+  "No matter what this year holds for U,",
+  "I hope U always feel supported,",
+  "valued & understood 💞",
+  "",
+  "May every challenge turn into strength 💪 and every quiet day remind U",
+  "of how special U truly are!! 🌷",
+  "",
+  "U deserve a year filled with happiness 💖",
+  "with moments that feel light, warm & meaningful 🌸",
+  "",
+  "May this year be gentle with U ✨",
+  "& give you everything Ur heart",
+  "has been hoping for 💫",
+  "",
+  "Wishing U",
+  "a beautiful New Year my LOVE ⭐",
+];
 
 export default function FinalCardScreen() {
+  const [isMobile, setIsMobile] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const CLOSED_WIDTH = 360;
-  const OPEN_WIDTH = 780;
-  const HEIGHT = 460;
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
+  /* ================= MOBILE ================= */
+  if (isMobile) {
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          padding: 20,
+          fontFamily: '"Comic Neue", cursive',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          color: "white",
+        }}
+      >
+        <h1 style={{ fontSize: 22, marginBottom: 14 }}>
+          For my Cutiepie :)
+        </h1>
+
+        {!open ? (
+          <motion.div
+            onClick={() => setOpen(true)}
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            style={{
+              width: "90%",
+              maxWidth: 340,
+              height: 420,
+              background: "#fdf6ec",
+              borderRadius: 18,
+              border: "5px solid #a855f7",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
+            }}
+          >
+            <img
+              src="/happy-new-year-2026.png"
+              alt="Cover"
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+            />
+          </motion.div>
+        ) : (
+          <motion.div
+            onClick={() => setOpen(false)}   // ✅ tap to close
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            style={{
+              width: "100%",
+              maxWidth: 360,
+              background: "#fdf6ec",
+              borderRadius: 18,
+              border: "4px solid #a855f7",
+              padding: 16,
+              color: "#374151",
+              fontSize: 14,
+              lineHeight: 1.7,
+              maxHeight: "75vh",
+              overflowY: "auto",
+              cursor: "pointer",
+            }}
+          >
+            {LETTER.map((line, i) => (
+              <p
+                key={i}
+                style={{ margin: line === "" ? "12px 0" : "0 0 6px 0" }}
+              >
+                {line}
+              </p>
+            ))}
+            <p style={{ marginTop: 12, fontSize: 12, opacity: 0.6 }}>
+              Tap to close 💜
+            </p>
+          </motion.div>
+        )}
+      </div>
+    );
+  }
+
+  /* ================= DESKTOP ================= */
   return (
     <div
       style={{
@@ -41,112 +138,70 @@ export default function FinalCardScreen() {
         For my Cutiepie :)
       </h1>
 
-      <p style={{ opacity: 0.6, marginBottom: 24 }}>
+      <p style={{ opacity: 0.6, marginBottom: 20 }}>
         Tap the card to {open ? "close" : "read"}
       </p>
 
-      {/* CARD */}
       <motion.div
-        animate={{ width: open ? OPEN_WIDTH : CLOSED_WIDTH }}
+        onClick={() => setOpen(p => !p)}
+        animate={{ width: open ? 780 : 360 }}
         transition={{ type: "spring", stiffness: 120, damping: 22 }}
         style={{
-          height: HEIGHT,
+          height: 460,
           position: "relative",
           perspective: 1600,
           cursor: "pointer",
         }}
-        onClick={() => setOpen((p) => !p)}
       >
-        {/* INSIDE PAGES */}
-        {open && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.15 }}
+        {/* INSIDE PAGES — ALWAYS MOUNTED (NO SHOWER EFFECT) */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "#fdf6ec",
+            borderRadius: 18,
+            border: "6px solid #a855f7",
+            boxShadow: "0 25px 50px rgba(0,0,0,0.45)",
+            display: "flex",
+            opacity: open ? 1 : 0,
+            pointerEvents: open ? "auto" : "none",
+          }}
+        >
+          <div
             style={{
-              position: "absolute",
-              inset: 0,
-              background: "#fdf6ec",
-              borderRadius: 18,
-              border: "6px solid #a855f7",
-              boxShadow: "0 25px 50px rgba(0,0,0,0.45)",
-              display: "flex",
-              overflow: "hidden",
+              width: "50%",
+              padding: 34,
+              borderRight: "2px solid rgba(168,85,247,0.4)",
+              color: "#374151",
+              fontSize: 16,
+              lineHeight: 1.7,
+              textAlign: "left",
             }}
           >
-            {/* LEFT PAGE */}
-            <motion.div
-              variants={{ hidden: {}, visible: {} }}
-              initial="hidden"
-              animate="visible"
-              style={{
-                width: "50%",
-                padding: 34,
-                textAlign: "left",
-                color: "#374151",
-                fontSize: 16,
-                lineHeight: 1.7,
-                borderRight: "2px solid rgba(168,85,247,0.4)",
-              }}
-            >
-              {[
-                     "I hope this year brings U calm mornings ☀️ peaceful nights 🌙 & little moments that make U smile :)",
-                "without any reason 😊",
-                "",
-                "No matter what this year holds for U,",
-                "I hope U always feel supported,",
-                "valued & understood 💞",
-                "",
-                "May every challenge turn into strength 💪 and every quiet day remind U",
-                "of how special U truly are!! 🌷",
-              ].map((line, i) => (
-                <motion.p
-                  key={i}
-                  custom={i}
-                  style={{ margin: line === "" ? "12px 0" : "0 0 6px 0" }}
-                >
-                  {line}
-                </motion.p>
-              ))}
-            </motion.div>
+            {LETTER.slice(0, 9).map((l, i) => (
+              <p key={i} style={{ margin: l === "" ? "12px 0" : "0 0 6px 0" }}>
+                {l}
+              </p>
+            ))}
+          </div>
 
-            {/* RIGHT PAGE */}
-            <motion.div
-              variants={{ hidden: {}, visible: {} }}
-              initial="hidden"
-              animate="visible"
-              style={{
-                width: "50%",
-                padding: 34,
-                textAlign: "left",
-                color: "#374151",
-                fontSize: 16,
-                lineHeight: 1.7,
-              }}
-            >
-              {[
-          
-
-                 "U deserve a year filled with happiness 💖",
-                "with moments that feel light, warm & meaningful 🌸",
-                "",
-                "May this year be gentle with U ✨",
-                "& give you everything Ur heart",
-                "has been hoping for 💫",
-                "","",
-                "Wishing U", "a beautiful New Year my LOVE⭐",
-              ].map((line, i) => (
-                <motion.p
-                  key={i}
-                  custom={i}
-                  style={{ margin: line === "" ? "12px 0" : "0 0 6px 0" }}
-                >
-                  {line}
-                </motion.p>
-              ))}
-            </motion.div>
-          </motion.div>
-        )}
+          <div
+            style={{
+              width: "50%",
+              padding: 34,
+              color: "#374151",
+              fontSize: 16,
+              lineHeight: 1.7,
+              textAlign: "left",
+            }}
+          >
+            {LETTER.slice(9).map((l, i) => (
+              <p key={i} style={{ margin: l === "" ? "12px 0" : "0 0 6px 0" }}>
+                {l}
+              </p>
+            ))}
+          </div>
+        </div>
 
         {/* FRONT COVER */}
         <motion.div
@@ -160,38 +215,15 @@ export default function FinalCardScreen() {
             border: "6px solid #a855f7",
             transformOrigin: "left center",
             backfaceVisibility: "hidden",
-            boxShadow: open
-              ? "0 12px 24px rgba(0,0,0,0.22)"
-              : "0 25px 50px rgba(0,0,0,0.45)",
             overflow: "hidden",
           }}
         >
           <img
             src="/happy-new-year-2026.png"
-            alt="Happy New Year 2026"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-            }}
+            alt="Happy New Year"
+            style={{ width: "100%", height: "100%", objectFit: "contain" }}
           />
         </motion.div>
-
-        {/* SPINE SHADOW */}
-        <motion.div
-          animate={{ opacity: open ? 0.35 : 0.6 }}
-          transition={{ duration: 0.4 }}
-          style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            bottom: 0,
-            width: 12,
-            background:
-              "linear-gradient(to right, rgba(0,0,0,0.35), rgba(0,0,0,0))",
-            pointerEvents: "none",
-          }}
-        />
       </motion.div>
     </div>
   );

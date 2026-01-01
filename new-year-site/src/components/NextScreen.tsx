@@ -40,6 +40,8 @@ export default function NextScreen() {
   const [showTicket, setShowTicket] = useState(false);
   const [showMoments, setShowMoments] = useState(false);
 
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
+
   const handleGiftClick = () => {
     confetti({
       particleCount: 160,
@@ -124,7 +126,7 @@ export default function NextScreen() {
               <GiftIcon />
             </motion.div>
 
-            {/* 🃏 CARDS — MATCH REFERENCE */}
+            {/* Cards */}
             {cards.map((card, index) =>
               removed.includes(card.id) ? null : (
                 <motion.div
@@ -174,7 +176,7 @@ export default function NextScreen() {
         </div>
       )}
 
-      {/* ---------------- TICKET → MOMENTS ---------------- */}
+      {/* ---------------- TICKET ---------------- */}
       <AnimatePresence mode="wait">
         {!showMoments && showTicket && (
           <motion.div
@@ -192,17 +194,18 @@ export default function NextScreen() {
               justifyContent: "center",
               gap: 20,
               textAlign: "center",
+              padding: 20,
             }}
           >
-            {/* Golden Ticket */}
+            {/* 🎟 Golden Ticket */}
             <motion.div
               initial={{ opacity: 0, scale: 0.65, rotate: -14, y: 90 }}
               animate={{ opacity: 1, scale: 1, rotate: [-14, 4, 0], y: 0 }}
               transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
               style={{
-                width: "100%",
-                maxWidth: 420,
-                padding: 26,
+                width: isMobile ? "88%" : "100%",
+                maxWidth: isMobile ? 320 : 420,
+                padding: isMobile ? 20 : 26,
                 borderRadius: 22,
                 background: "#0b1a33",
                 border: "3px solid #e7d28b",
@@ -224,7 +227,13 @@ export default function NextScreen() {
                 <TicketIcon />
               </div>
 
-              <h2 style={{ color: "#f6d77a", letterSpacing: 3 }}>
+              <h2
+                style={{
+                  color: "#f6d77a",
+                  letterSpacing: 3,
+                  fontSize: isMobile ? 18 : 22,
+                }}
+              >
                 GOLDEN TICKET
               </h2>
 
@@ -243,7 +252,7 @@ export default function NextScreen() {
                 style={{
                   fontStyle: "italic",
                   color: "rgba(255,255,255,0.9)",
-                  fontSize: 16,
+                  fontSize: isMobile ? 14 : 16,
                   marginTop: 12,
                 }}
               >
@@ -255,38 +264,17 @@ export default function NextScreen() {
               </p>
             </motion.div>
 
-            {/* CLAIM TICKET */}
+            {/* CLAIM */}
             <motion.div
               onClick={() => setShowMoments(true)}
-              initial="rest"
-              whileHover="hover"
-              whileTap="hover"
               style={{
-                position: "relative",
                 fontSize: 13,
                 letterSpacing: 1.5,
                 color: "rgba(255,255,255,0.6)",
                 cursor: "pointer",
-                userSelect: "none",
               }}
             >
               CLAIM TICKET →
-              <motion.span
-                variants={{
-                  rest: { scaleX: 0 },
-                  hover: { scaleX: 1 },
-                }}
-                transition={{ duration: 0.35, ease: "easeInOut" }}
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  bottom: -4,
-                  width: "100%",
-                  height: 1,
-                  background: "rgba(255,255,255,0.7)",
-                  transformOrigin: "left",
-                }}
-              />
             </motion.div>
           </motion.div>
         )}
@@ -297,16 +285,10 @@ export default function NextScreen() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            style={{
-              position: "fixed",
-              inset: 0,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+            transition={{ duration: 0.5 }}
+            style={{ position: "fixed", inset: 0 }}
           >
-            <MomentsScreen onContinue={() => console.log("Next moment")} />
+            <MomentsScreen onContinue={() => {}} />
           </motion.div>
         )}
       </AnimatePresence>
