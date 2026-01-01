@@ -6,9 +6,10 @@ import FinalCardScreen from "./FinalCardScreen";
 const images = [
   "/1.jpeg","/2.jpeg","/3.jpeg","/5.jpeg",
   "/6.jpeg","/7.jpeg","/8.jpeg","/9.jpeg","/10.jpeg",
-  "/11.jpeg","/12.jpeg","/13.jpeg","/14.jpeg","/15.jpeg","/18.jpeg","/19.jpeg","/20.jpeg",
-  "/21.jpeg","/22.jpeg", "/23.jpeg", "/25.jpeg","/26.jpeg","/27.jpeg","/28.jpeg","/29.jpeg",
-  "/30.jpeg"
+  "/11.jpeg","/12.jpeg","/13.jpeg","/14.jpeg","/15.jpeg",
+  "/18.jpeg","/19.jpeg","/20.jpeg","/21.jpeg","/22.jpeg",
+  "/23.jpeg","/25.jpeg","/26.jpeg","/27.jpeg","/28.jpeg",
+  "/29.jpeg","/30.jpeg"
 ];
 
 /* ---------- BACKGROUND MUSIC ---------- */
@@ -25,7 +26,6 @@ function BackgroundMusic({ stop }: { stop: boolean }) {
     audio.play().catch(() => {});
     setStarted(true);
 
-    // Smooth fade-in (feels louder & premium)
     let v = 0;
     const fade = setInterval(() => {
       v += 0.05;
@@ -34,7 +34,6 @@ function BackgroundMusic({ stop }: { stop: boolean }) {
     }, 120);
   };
 
-  // Stop music when FinalCard opens
   if (stop && audioRef.current) {
     audioRef.current.pause();
   }
@@ -43,7 +42,6 @@ function BackgroundMusic({ stop }: { stop: boolean }) {
     <>
       <audio ref={audioRef} src="/bgm.mp3" loop muted={muted} />
 
-      {/* Music Toggle */}
       <button
         onClick={() => setMuted(m => !m)}
         style={{
@@ -65,7 +63,6 @@ function BackgroundMusic({ stop }: { stop: boolean }) {
         {muted ? "🔇 Music Off" : "🎶 Music On"}
       </button>
 
-      {/* Expose starter */}
       <div id="music-starter" onClick={startMusic} />
     </>
   );
@@ -77,9 +74,7 @@ export default function MomentsScreen() {
   const [showFinalCard, setShowFinalCard] = useState(false);
 
   const handleNext = () => {
-    // Start music on FIRST user interaction
-    const starter = document.getElementById("music-starter");
-    starter?.click();
+    document.getElementById("music-starter")?.click();
 
     if (index < images.length - 1) {
       setIndex(i => i + 1);
@@ -110,14 +105,22 @@ export default function MomentsScreen() {
             textAlign: "center",
           }}
         >
-          <h1 style={{ fontSize: "clamp(22px, 5vw, 34px)", marginBottom: 8 }}>
-            Some moments from this year
-          </h1>
+          {/* ✅ HEADER WRAPPER — PREVENTS MOON OVERLAP */}
+          <div
+            style={{
+              paddingTop: "clamp(48px, 14vh, 120px)",
+            }}
+          >
+            <h1 style={{ fontSize: "clamp(22px, 5vw, 34px)", marginBottom: 8 }}>
+              Some moments from this year
+            </h1>
 
-          <p style={{ opacity: 0.6, marginBottom: 24 }}>
-            Tap the card to continue
-          </p>
+            <p style={{ opacity: 0.6, marginBottom: 24 }}>
+              Tap the card to continue
+            </p>
+          </div>
 
+          {/* CARD STACK */}
           <div style={{ position: "relative", width: 280 }}>
             <div
               style={{
